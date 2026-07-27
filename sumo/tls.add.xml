@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  116th Ave NE & NE 12th St - netconvert'in OSM verisinden (turn:lanes,
+  gercek serit sayilari) urettigi GERCEK sinyal mantigi. Placeholder
+  DEGIL - bu, ag olusturulurken otomatik cikarilan, gercek kavsak
+  geometrisine dayali bir programdir.
+
+  ID netedit'te dogrulandi: cluster_53190763_5896114911_7619513267_7619513268
+
+-->
+<additional>
+    <tlLogic id="cluster_53190763_5896114911_7619513267_7619513268_#3more"
+             type="actuated" programID="0" offset="0">
+        <!-- Kuzey-Guney yon grubu: yesil (actuated, 5-50sn arasi uzayabilir) -->
+        <phase duration="28" state="rrrrrgGGggrrrrrgGGggGrGr" minDur="5" maxDur="50"/>
+        <phase duration="5"  state="rrrrrgGGggrrrrrgGGggrrrr"/>
+        <!-- Kuzey-Guney sari -->
+        <phase duration="3"  state="rrrrryyyggrrrrryyyggrrrr"/>
+        <!-- Kuzey-Guney sola donus fazi -->
+        <phase duration="6"  state="rrrrrrrrGGrrrrrrrrGGrrrr" minDur="5" maxDur="50"/>
+        <phase duration="3"  state="rrrrrrrryyrrrrrrrryyrrrr"/>
+        <!-- Dogu-Bati yon grubu: yesil -->
+        <phase duration="28" state="gGGggrrrrrgGGggrrrrrrGrG" minDur="5" maxDur="50"/>
+        <phase duration="5"  state="gGGggrrrrrgGGggrrrrrrrrr"/>
+        <!-- Dogu-Bati sari -->
+        <phase duration="3"  state="yyyggrrrrryyyggrrrrrrrrr"/>
+        <!-- Dogu-Bati sola donus fazi -->
+        <phase duration="6"  state="rrrGGrrrrrrrrGGrrrrrrrrr" minDur="5" maxDur="50"/>
+        <phase duration="3"  state="rrryyrrrrrrrryyrrrrrrrrr"/>
+    </tlLogic>
+</additional>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <input>
+        <net-file value="../network/bellevue_116th_ne12th.net.xml"/>
+        <route-files value="routes.rou.xml"/>
+        <additional-files value="../network/bellevue_116th_ne12th.poly.xml"/>
+        <gui-settings-file value="view_settings.xml"/>
+    </input>
+
+    <time>
+        <begin value="0"/>
+        <end value="3600"/>
+        <step-length value="0.1"/>
+    </time>
+
+    <processing>
+        <time-to-teleport value="-1"/>
+        <collision.action value="warn"/>
+    </processing>
+
+    <report>
+        <verbose value="true"/>
+        <duration-log.statistics value="true"/>
+    </report>
+</configuration>

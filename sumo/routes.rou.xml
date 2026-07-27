@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  116th Ave NE & NE 12th St - GERCEK edge ID'leri kullanilarak yazildi
+  (netedit ile kavsaga bagli kenarlar dogrulandi).
+  Yon eslemesi (netedit'te dogrulandi):
+    116th Ave NE kuzey : giris=428067750#0   cikis=-428067750#0
+    116th Ave NE guney : giris=-428067754#0  cikis=428067754#0
+    NE 12th St bati    : giris=428067756     cikis=160183267#1
+    NE 12th St dogu    : giris=428067759#0   cikis=378376408#1
+-->
+<routes>
+    <vType id="car" vClass="passenger" accel="2.6" decel="4.5" sigma="0.5"
+           length="4.8" minGap="2.5" maxSpeed="15.6" guiShape="passenger"/>
+    <vType id="bus" vClass="bus" accel="1.5" decel="4.0" sigma="0.3"
+           length="12.0" minGap="3.0" maxSpeed="14.0" guiShape="bus"/>
+
+    <!-- ================= KUZEYDEN GUNEYE (116th Ave NE) ================= -->
+    <flow id="north_straight" type="car" from="428067750#0" to="428067754#0"
+          begin="0" end="3600" vehsPerHour="420"/>
+    <flow id="north_right"    type="car" from="428067750#0" to="160183267#1"
+          begin="0" end="3600" vehsPerHour="90"/>
+    <flow id="north_left"     type="car" from="428067750#0" to="378376408#1"
+          begin="0" end="3600" vehsPerHour="90"/>
+
+    <!-- ================= GUNEYDEN KUZEYE ================= -->
+    <flow id="south_straight" type="car" from="-428067754#0" to="-428067750#0"
+          begin="0" end="3600" vehsPerHour="400"/>
+    <flow id="south_right"    type="car" from="-428067754#0" to="378376408#1"
+          begin="0" end="3600" vehsPerHour="85"/>
+    <flow id="south_left"     type="car" from="-428067754#0" to="160183267#1"
+          begin="0" end="3600" vehsPerHour="85"/>
+
+    <!-- ================= BATIDAN DOGUYA (NE 12th St) ================= -->
+    <flow id="west_straight" type="car" from="428067756" to="378376408#1"
+          begin="0" end="3600" vehsPerHour="260"/>
+    <flow id="west_right"    type="car" from="428067756" to="-428067750#0"
+          begin="0" end="3600" vehsPerHour="55"/>
+    <flow id="west_left"     type="car" from="428067756" to="428067754#0"
+          begin="0" end="3600" vehsPerHour="55"/>
+
+    <!-- ================= DOGUDAN BATIYA ================= -->
+    <flow id="east_straight" type="car" from="428067759#0" to="160183267#1"
+          begin="0" end="3600" vehsPerHour="250"/>
+    <flow id="east_right"    type="car" from="428067759#0" to="428067754#0"
+          begin="0" end="3600" vehsPerHour="50"/>
+    <flow id="east_left"     type="car" from="428067759#0" to="-428067750#0"
+          begin="0" end="3600" vehsPerHour="50"/>
+
+    <!-- Toplu tasima: 226 ve 250 numarali King County Metro hatlari -->
+    <flow id="transit_ns" type="bus" from="428067750#0" to="428067754#0"
+          begin="0" end="3600" vehsPerHour="6"/>
+</routes>

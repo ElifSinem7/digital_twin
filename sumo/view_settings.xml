@@ -1,0 +1,8 @@
+<viewsettings>
+    <scheme name="real world"/>
+    <decal file="satellite.png"
+           centerX="526.68" centerY="889.35"
+           width="1053.36" height="1778.70"
+           rotation="0"
+           layer="-10"/>
+</viewsettings>

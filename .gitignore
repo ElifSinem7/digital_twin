@@ -1,0 +1,19 @@
+# Buyuk video dosyalari - GitHub'a yuklenmemeli
+videos/
+
+# Python sanal ortami
+scripts/venv/
+__pycache__/
+*.pyc
+
+# YOLO araci takip ciktilari (buyuk olabilir)
+tracks/
+
+# Gecici ekran goruntusu klasoru
+scripts/_frames/
+
+# Buyuk karsilastirma videosu ciktisi
+comparison_output.mp4
+
+# YOLO model agirliklari (otomatik indirilir, tekrar indirilebilir)
+*.pt
