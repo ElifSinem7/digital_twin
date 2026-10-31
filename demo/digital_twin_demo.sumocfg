@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- OTOMATIK URETILDI - demo/make_demo_routes.py (sadece demo kaydi icin) -->
+<configuration>
+    <input>
+        <net-file value="../network/bellevue_116th_ne12th.net.xml"/>
+        <route-files value="routes_demo.rou.xml"/>
+        <additional-files value="../network/bellevue_116th_ne12th.poly.xml"/>
+        <gui-settings-file value="../sumo/view_settings.xml"/>
+    </input>
+    <time>
+        <begin value="0"/>
+        <end value="3600"/>
+        <step-length value="0.1"/>
+    </time>
+    <processing>
+        <time-to-teleport value="-1"/>
+        <collision.action value="warn"/>
+        <ignore-route-errors value="true"/>
+    </processing>
+</configuration>

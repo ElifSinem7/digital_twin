@@ -6379,13 +6379,13 @@
         <phase duration="5"  state="GGrrrrrGrrr"/>
         <phase duration="5"  state="yyrrrrryrrr"/>
     </tlLogic>
-    <tlLogic id="cluster_53190763_5896114911_7619513267_7619513268_#3more" type="actuated" programID="0" offset="0">
-        <phase duration="28" state="rrrrrgGGggrrrrrgGGggGrGr" minDur="5" maxDur="50"/>
+    <tlLogic id="cluster_53190763_5896114911_7619513267_7619513268_#3more" type="static" programID="0" offset="0">
+        <phase duration="13" state="rrrrrgGGggrrrrrgGGggGrGr" minDur="5" maxDur="50"/>
         <phase duration="5"  state="rrrrrgGGggrrrrrgGGggrrrr"/>
         <phase duration="3"  state="rrrrryyyggrrrrryyyggrrrr"/>
         <phase duration="6"  state="rrrrrrrrGGrrrrrrrrGGrrrr" minDur="5" maxDur="50"/>
         <phase duration="3"  state="rrrrrrrryyrrrrrrrryyrrrr"/>
-        <phase duration="28" state="gGGggrrrrrgGGggrrrrrrGrG" minDur="5" maxDur="50"/>
+        <phase duration="44.5" state="gGGggrrrrrgGGggrrrrrrGrG" minDur="5" maxDur="50"/>
         <phase duration="5"  state="gGGggrrrrrgGGggrrrrrrrrr"/>
         <phase duration="3"  state="yyyggrrrrryyyggrrrrrrrrr"/>
         <phase duration="6"  state="rrrGGrrrrrrrrGGrrrrrrrrr" minDur="5" maxDur="50"/>

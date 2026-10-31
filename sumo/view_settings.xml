@@ -1,5 +1,6 @@
 <viewsettings>
     <scheme name="real world"/>
+    <viewport zoom="100" x="599.2" y="821.8" angle="30.3"/>
     <decal file="satellite.png"
            centerX="526.68" centerY="889.35"
            width="1053.36" height="1778.70"

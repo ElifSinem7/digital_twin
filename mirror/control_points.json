@@ -1,0 +1,30 @@
+{
+  "_comment": "Piksel (1280x720 video karesi, t=421 s) <-> SUMO ag koordinati (m). Noktalar: yaya gecidi cizgilerinin uclari ve gecit ic cizgilerinin kesistigi kavsak kutusu koseleri. SUMO tarafinda gecit dikdortgenleri (:cluster_..._c0..c3) ve ic kenarlarinin uzantilarinin kesisimi kullanildi. Cizgiler: 1-boyutlu kisitlar (piksel orneklerinin SUMO'daki ilgili kaldirim/orta cizgi poligonuna dusmesi istenir).",
+  "frame_time_s": 421.0,
+  "points": [
+    {"id": 1,  "name": "W gecidi dis cizgi - kuzey ucu",  "px": [403, 253],  "xy": [578.1, 818.9]},
+    {"id": 2,  "name": "W gecidi dis cizgi - guney ucu",  "px": [507, 673],  "xy": [580.8, 802.2]},
+    {"id": 3,  "name": "N gecidi dis cizgi - bati ucu",   "px": [452, 204],  "xy": [583.1, 824.1]},
+    {"id": 4,  "name": "N gecidi dis cizgi - dogu ucu",   "px": [717, 149],  "xy": [602.3, 824.4]},
+    {"id": 5,  "name": "E gecidi dis cizgi - kuzey ucu",  "px": [787, 157],  "xy": [610.0, 825.1]},
+    {"id": 6,  "name": "E gecidi dis cizgi - guney ucu",  "px": [1035, 312], "xy": [611.3, 805.1]},
+    {"id": 7,  "name": "Kavsak kutusu KB kosesi",         "px": [451, 226],  "xy": [581.9, 820.1]},
+    {"id": 8,  "name": "Kavsak kutusu KD kosesi",         "px": [757, 159],  "xy": [606.3, 820.5]},
+    {"id": 9,  "name": "Kavsak kutusu GD kosesi",         "px": [1046, 352], "xy": [607.5, 801.9]},
+    {"id": 10, "name": "Kavsak kutusu GB kosesi",         "px": [641, 668],  "xy": [584.9, 801.8]}
+  ],
+  "lines": [
+    {"name": "W sari orta cizgi",   "px": [[0, 502], [92, 470], [185, 436]],
+     "edges": ["428067756"], "border": "left_of_leftmost"},
+    {"name": "W kuzey kaldirimi",   "px": [[0, 425], [100, 378], [200, 328], [280, 296], [330, 279]],
+     "edges": ["160183267#1"], "border": "right_of_outermost"},
+    {"name": "N sari orta cizgi",   "px": [[465, 55], [522, 95], [580, 136]],
+     "edges": ["-428067753#0", "-577951513", "-428067754#1"], "border": "left_of_leftmost"},
+    {"name": "N bati kaldirimi",    "px": [[440, 150], [435, 100], [430, 40]],
+     "edges": ["-428067753#0", "-577951513", "-428067754#1"], "border": "right_of_outermost"},
+    {"name": "E sari orta cizgi",   "px": [[952, 210], [995, 180], [1035, 152]],
+     "edges": ["513238757", "428067759#0"], "border": "left_of_leftmost"},
+    {"name": "E guney kaldirimi",   "px": [[1035, 300], [1040, 250], [1055, 220], [1075, 190], [1080, 160]],
+     "edges": ["378376408#1"], "border": "right_of_outermost"}
+  ]
+}

@@ -17,3 +17,27 @@ comparison_output.mp4
 
 # YOLO model agirliklari (otomatik indirilir, tekrar indirilebilir)
 *.pt
+
+# Demo videolari (mirror/make_mirror_demo.sh ile yeniden uretilir)
+demo/*.mp4
+
+# Videolar ve üretilen çıktılar
+*.mp4
+tripinfo*.xml
+speeds_*.csv
+signal_from_traffic_*.csv
+signal_timeline.csv
+sumo/routes_replay.rou.xml
+
+# Dokümanlar (ana README hariç)
+*.md
+!README.md
+
+# AI araçları
+CLAUDE.md
+.claude/
+
+# Yedekler
+*.bak_before_fix
+mirror/mirror_run_log*.csv
+demo/routes_demo.rou.xml
