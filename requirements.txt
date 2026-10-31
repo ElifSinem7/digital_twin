@@ -1,0 +1,10 @@
+# Python 3.10 ile test edildi
+opencv-python>=4.8
+numpy>=1.24
+pandas>=2.0
+shapely>=2.0
+matplotlib>=3.7
+ultralytics>=8.2        # YOLOv8 + ByteTrack (torch'u da kurar; GPU icin README'deki nota bakin)
+lap>=0.5                # ByteTrack eslestirmesi
+gdown>=5.1              # videolari Google Drive'dan indirmek icin
+eclipse-sumo==1.27.1    # sumo, sumo-gui, netconvert + traci/sumolib (SUMO_HOME icin README'ye bakin)

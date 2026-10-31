@@ -16,8 +16,8 @@ sadece belirli bir zaman araligi icin calisan versiyonu.
     <= 2.5 katiysa (maskenin ustunden gecen gercek bir arac daha buyuk / farkli bir kutu verir).
   - Cikti: frame,time_s,track_id,cls,conf,x1,y1,x2,y2,bx,by  (bx,by = kutunun alt-ortasi)
 
-Kullanim (GPU'lu venv ile):
-    ~/projects/dt-intersection/.venv/bin/python detect_window.py --start 384 --end 504 \
+Kullanim (GPU icin CUDA destekli bir Python ortamiyla):
+    python detect_window.py --start 384 --end 504 \
         --mask static_mask.png --out ../tracks/window_384_504_boxes.csv
 """
 import argparse
