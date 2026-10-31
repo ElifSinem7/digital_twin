@@ -1,12 +1,9 @@
+#!/usr/bin/env python3
 """
+sync_compare.py
+================
 Gercek trafik kamerasi videosu ile SUMO dijital ikizini YAN YANA,
 SENKRON olarak calistirip karsilastiran arac.
-
-- Solda: gercek video (dataset'ten)
-- Sagda: SUMO-GUI simulasyon ekran goruntusu (arka planda gercek harita/
-  uydu goruntusu decal olarak yuklu)
-- Ust bilgi cubugu: simulasyon zamani + her yaklasim kolundaki anlik
-  arac sayisi (SUMO tarafi icin TraCI'den canli okunur)
 """
 
 import argparse
@@ -17,19 +14,15 @@ import time
 import cv2
 import numpy as np
 
-# SUMO_HOME/tools klasörünü PYTHONPATH'e ekleme (traci burada)
 if "SUMO_HOME" in os.environ:
     tools = os.path.join(os.environ["SUMO_HOME"], "tools")
     sys.path.append(tools)
 else:
-    sys.exit("HATA: SUMO_HOME ortam degiskeni tanimli degil. "
-              "Once SUMO kurulumunuzu ve SUMO_HOME'u ayarlayin.")
+    sys.exit("HATA: SUMO_HOME ortam degiskeni tanimli degil.")
 
 import traci  # noqa: E402
 
 
-# Kavsaga giren gerçek edge ID'leri (netedit'te doğrulandı,
-# cluster_53190763_5896114911_7619513267_7619513268 kavşağı).
 APPROACH_EDGES = {
     "Kuzey (116th Ave NE)": "428067750#0",
     "Guney (116th Ave NE)": "-428067754#0",
@@ -39,27 +32,19 @@ APPROACH_EDGES = {
 
 
 def parse_args():
-    p = argparse.ArgumentParser(description=__doc__,
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--video", required=True, help="Gercek kavşak videosunun yolu")
-    p.add_argument("--sumocfg", required=True, help="SUMO .sumocfg dosyasının yolu")
-    p.add_argument("--sumo-binary", default="sumo-gui",
-                   help="'sumo-gui' (görsel) ya da 'sumo' (hızlı/görsel yok)")
-    p.add_argument("--video-start-offset", type=float, default=0.0,
-                   help="Videoda simulasyon t=0'ina karşılık gelen saniye")
-    p.add_argument("--output", default=None,
-                   help="Karşılaştırma videosunu bu dosyaya mp4 olarak kaydet")
-    p.add_argument("--live", action="store_true",
-                   help="Karşılaştırmayı ekranda canlı göster")
-    p.add_argument("--panel-height", type=int, default=540,
-                   help="Her iki panelin de ölçekleneceği yükseklik (px)")
-    p.add_argument("--screenshot-dir", default="_frames",
-                   help="SUMO ekran görüntülerinin geçici olarak yazıldığı klasör")
+    p = argparse.ArgumentParser()
+    p.add_argument("--video", required=True)
+    p.add_argument("--sumocfg", required=True)
+    p.add_argument("--sumo-binary", default="sumo-gui")
+    p.add_argument("--video-start-offset", type=float, default=0.0)
+    p.add_argument("--output", default=None)
+    p.add_argument("--live", action="store_true")
+    p.add_argument("--panel-height", type=int, default=540)
+    p.add_argument("--screenshot-dir", default="/dev/shm/sumo_screenshots")
     return p.parse_args()
 
 
 def get_vehicle_counts():
-    """Her yaklaşım kolundaki anlık araç sayısını TraCI'den okur."""
     counts = {}
     for label, edge_id in APPROACH_EDGES.items():
         try:
@@ -74,7 +59,6 @@ def draw_info_bar(frame, sim_time, counts, width, bar_height=70):
     text = f"Sim. zamani: {sim_time:6.1f} s"
     cv2.putText(bar, text, (10, 25), cv2.FONT_HERSHEY_SIMPLEX,
                 0.7, (255, 255, 255), 2, cv2.LINE_AA)
-
     x = 10
     y = 55
     for label, n in counts.items():
@@ -94,13 +78,13 @@ def resize_to_height(img, height):
 def main():
     args = parse_args()
     os.makedirs(args.screenshot_dir, exist_ok=True)
+    print(f">>> Ekran goruntusu klasoru: {args.screenshot_dir}")
 
     cap = cv2.VideoCapture(args.video)
     if not cap.isOpened():
         sys.exit(f"HATA: Video acilamadi: {args.video}")
     video_fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
 
-    # Video başlangıç ofsetine atla
     if args.video_start_offset > 0:
         cap.set(cv2.CAP_PROP_POS_MSEC, args.video_start_offset * 1000)
 
@@ -110,8 +94,15 @@ def main():
     sumo_cmd = [args.sumo_binary, "-c", args.sumocfg, "--start", "--quit-on-end"]
     traci.start(sumo_cmd)
 
-    step_length = traci.simulation.getDeltaT()  # sumocfg'deki step-length
-    # Video karesi başına kaç SUMO adımı atılacağını hesaplar, böylece simülasyon zamanı video zamanını takip eder.
+    try:
+        view_ids = traci.gui.getIDList()
+        if view_ids:
+            traci.gui.setBoundary(view_ids[0], 500, 700, 700, 900)
+            print(f">>> Zoom ayarlandi: {view_ids[0]}")
+    except traci.exceptions.TraCIException as e:
+        print(f"[uyari] zoom ayarlanamadi: {e}")
+
+    step_length = traci.simulation.getDeltaT()
     sim_steps_per_video_frame = max(1, round((1.0 / video_fps) / step_length))
 
     writer = None
@@ -125,7 +116,7 @@ def main():
                 break
 
             if traci.simulation.getMinExpectedNumber() <= 0:
-                print(">>> Simülasyonda araç kalmadı, sonlandırılıyor.")
+                print(">>> Simulasyonda arac kalmadi, sonlandiriliyor.")
                 break
 
             for _ in range(sim_steps_per_video_frame):
@@ -134,29 +125,34 @@ def main():
             sim_time = traci.simulation.getTime()
             counts = get_vehicle_counts()
 
-            # SUMO-GUI ekran görüntüsünü al
             shot_path = os.path.join(args.screenshot_dir, f"f{frame_idx:06d}.png")
+            sim_frame = None
             try:
                 traci.gui.screenshot("View #0", shot_path)
-                for _ in range(20):
+                ok = False
+                for _ in range(150):
                     if os.path.exists(shot_path) and os.path.getsize(shot_path) > 0:
+                        ok = True
                         break
-                    time.sleep(0.01)
-                sim_frame = cv2.imread(shot_path)
-            except traci.exceptions.TraCIException:
-                sim_frame = None
+                    time.sleep(0.02)
+                if not ok and frame_idx < 10:
+                    print(f"[DEBUG] kare {frame_idx}: dosya olusmadi. "
+                          f"dizin var mi: {os.path.isdir(args.screenshot_dir)}")
+                sim_frame = cv2.imread(shot_path) if ok else None
+            except traci.exceptions.TraCIException as e:
+                if frame_idx < 10:
+                    print(f"[DEBUG] kare {frame_idx}: TraCIException: {e}")
 
             if sim_frame is None:
                 sim_frame = np.zeros_like(video_frame)
-                cv2.putText(sim_frame, "SUMO görüntüsü alınamadı (sumo-gui gerekli)",
+                cv2.putText(sim_frame, "SUMO goruntusu alinamadi",
                             (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
 
             video_r = resize_to_height(video_frame, args.panel_height)
             sim_r = resize_to_height(sim_frame, args.panel_height)
-
-            cv2.putText(video_r, "GERÇEK VIDEO", (10, 30),
+            cv2.putText(video_r, "GERCEK VIDEO", (10, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2, cv2.LINE_AA)
-            cv2.putText(sim_r, "DİJİTAL İKİZ (SUMO)", (10, 30),
+            cv2.putText(sim_r, "DIJITAL IKIZ (SUMO)", (10, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2, cv2.LINE_AA)
 
             combined = cv2.hconcat([video_r, sim_r])
@@ -170,13 +166,11 @@ def main():
                 writer.write(combined)
 
             if args.live:
-                cv2.imshow("Gerçek Video vs Dijital İkiz - 116th Ave NE & NE 12th St",
-                           combined)
+                cv2.imshow("Gercek Video vs Dijital Ikiz", combined)
                 if cv2.waitKey(1) & 0xFF == ord("q"):
-                    print(">>> Kullanıcı tarafından durduruldu.")
+                    print(">>> Kullanici tarafindan durduruldu.")
                     break
 
-            # geçici screenshot dosyasını temizle
             try:
                 os.remove(shot_path)
             except OSError:
@@ -198,7 +192,7 @@ def main():
 
     print(">>> Bitti.")
     if args.output:
-        print(f">>> Karşılaştırma videosu kaydedildi: {args.output}")
+        print(f">>> Karsilastirma videosu kaydedildi: {args.output}")
 
 
 if __name__ == "__main__":

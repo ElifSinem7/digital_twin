@@ -1,0 +1,113 @@
+{
+  "duplicate_boxes_removed": 1,
+  "static_tracks_safety_net": [],
+  "stitches": 25,
+  "stitch_rejected": 0,
+  "short_tracks": 4,
+  "removed_steps": 1503,
+  "total_steps": 6358,
+  "max_dist_m": 40.0,
+  "snap_max_m": 6.0,
+  "lane_margin_m": 1.0,
+  "lane_hold_s": 1.0,
+  "drift_correction": {
+    "N_out": {
+      "slope": 0.12225924298555292,
+      "n": 7
+    },
+    "W_in": {
+      "slope": -0.3917407915532897,
+      "n": 11
+    },
+    "E_out": {
+      "slope": 0.20892212163719315,
+      "n": 12
+    },
+    "E_in": {
+      "slope": 0.06539213033088515,
+      "n": 10
+    },
+    "W_out": {
+      "slope": -0.08565753526448859,
+      "n": 6
+    }
+  },
+  "per_arm": [
+    {
+      "kol": "N",
+      "adim": 469,
+      "oturtulan": "100.0%",
+      "serit_yok": 0,
+      "kayma_medyan_m": 1.03,
+      "kayma_p90_m": 4.37
+    },
+    {
+      "kol": "E",
+      "adim": 1199,
+      "oturtulan": "99.1%",
+      "serit_yok": 11,
+      "kayma_medyan_m": 0.92,
+      "kayma_p90_m": 2.61
+    },
+    {
+      "kol": "S",
+      "adim": 244,
+      "oturtulan": "38.9%",
+      "serit_yok": 149,
+      "kayma_medyan_m": 2.44,
+      "kayma_p90_m": 4.87
+    },
+    {
+      "kol": "W",
+      "adim": 1491,
+      "oturtulan": "100.0%",
+      "serit_yok": 0,
+      "kayma_medyan_m": 0.86,
+      "kayma_p90_m": 1.33
+    }
+  ],
+  "lane_changes": [
+    {
+      "arm": "N",
+      "before": 1,
+      "lock_only": 1,
+      "after": 0,
+      "raw_supported": 6,
+      "raw_supported_corr": 1,
+      "kol_parcasi": 12
+    },
+    {
+      "arm": "E",
+      "before": 16,
+      "lock_only": 11,
+      "after": 0,
+      "raw_supported": 13,
+      "raw_supported_corr": 2,
+      "kol_parcasi": 22
+    },
+    {
+      "arm": "S",
+      "before": 0,
+      "lock_only": 0,
+      "after": 0,
+      "raw_supported": 0,
+      "raw_supported_corr": 0,
+      "kol_parcasi": 4
+    },
+    {
+      "arm": "W",
+      "before": 14,
+      "lock_only": 4,
+      "after": 0,
+      "raw_supported": 9,
+      "raw_supported_corr": 1,
+      "kol_parcasi": 21
+    }
+  ],
+  "origins": {
+    "W": 14,
+    "E": 10,
+    "S": 5,
+    "N": 5
+  }
+}

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 116th Ave NE & NE 12th St kavsaginin referans karesi (screenshot) uzerinde
 tikliyarak:
@@ -8,6 +9,10 @@ tikliyarak:
   3) Her sinyal kafasinin (goruntude 3 tane oldugunu belirttiniz) kucuk
      bir kutusunu
 isaretlemenizi saglar, sonucu config.json'a yazar.
+
+Kullanim:
+    python roi_selector.py --frame ../reference_frame.png --out ../config.json
+
 Kontroller:
     - Sol tik: nokta ekle (bolge/poligon icin)
     - 'n'    : mevcut poligonu bitir, isim sor, yeni poligona basla
@@ -68,10 +73,14 @@ def mouse_cb(event, x, y, flags, param):
             x0, y0 = box_start
             bx, by = min(x0, x), min(y0, y)
             bw, bh = abs(x - x0), abs(y - y0)
-            name = input("Sinyal kafası adı (ornek: signal_A): ").strip()
+            box_start = None
+            # KUCUK/YANLISLIKLA olusan kutulari (touchpad titremesi vb.) yok say - gercek bir kutu cizimi en az 5x5 piksel olmali.
+            if bw < 5 or bh < 5:
+                redraw(frame, frame)
+                return
+            name = input("Sinyal kafasi adi (ornek: signal_A): ").strip()
             if name:
                 signal_boxes[name] = [bx, by, bw, bh]
-            box_start = None
             redraw(frame, frame)
 
 

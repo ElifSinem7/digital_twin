@@ -1,8 +1,18 @@
+#!/usr/bin/env python3
 """
 config.json'da isaretlediginiz sinyal kafalarinin (signal_heads) her
 karedeki rengini (kirmizi/sari/yesil/sonuk) HSV renk esikleme ile okur.
 Tum kafalarin renk vektoru degistigi anlari "faz gecisi" olarak isaretler
-- boylece gercek sinyal dongusunu elle OLCMEDEN, videodan otomatik cikarir.
+- boylece gercek sinyal dongusunu ELLE OLCMEDEN, videodan otomatik cikarir.
+
+Kullanim:
+    python signal_light_extractor.py \
+        --video ../videos/Bellevue_116th_NE12th__2017-09-10_19-08-25.mp4 \
+        --config ../config.json \
+        --out-timeline ../signal_timeline_19.csv \
+        --out-tls ../sumo/tls_auto.add.xml \
+        --tls-id TLSID \
+        --sample-fps 2
 """
 import argparse
 import json
@@ -11,7 +21,7 @@ import cv2
 import numpy as np
 import pandas as pd
 
-# HSV renk aralıkları (OpenCV: H 0-179, S 0-255, V 0-255)
+# HSV renk araliklari (OpenCV: H 0-179, S 0-255, V 0-255)
 COLOR_RANGES = {
     "red": [((0, 100, 100), (10, 255, 255)), ((170, 100, 100), (179, 255, 255))],
     "yellow": [((15, 100, 100), (35, 255, 255))],
@@ -33,7 +43,7 @@ def classify_color(hsv_patch):
         if frac > best_score:
             best_score = frac
             best_color = color
-    # yeterince parlak piksel yoksa (lamba sönük / kapalı) "off" say
+    # yeterince parlak piksel yoksa (lamba sonuk / kapali) "off" say
     return best_color if best_score > 0.05 else "off"
 
 
@@ -55,13 +65,12 @@ def main():
         config = json.load(f)
     signal_heads = config["signal_heads"]
     if not signal_heads:
-        raise SystemExit("HATA: config.json içinde signal_heads tanımlı değil. "
-                          "Önce roi_selector.py ile işaretleyin.")
+        raise SystemExit("HATA: config.json içinde signal_heads tanımlı değil. Önce roi_selector.py ile işaretleyin.")
     head_names = sorted(signal_heads.keys())
 
     cap = cv2.VideoCapture(args.video)
     if not cap.isOpened():
-        raise SystemExit(f"HATA: video açılmadı: {args.video}")
+        raise SystemExit(f"HATA: video açılamadı: {args.video}")
     video_fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
     frame_stride = max(1, round(video_fps / args.sample_fps))
 
@@ -78,16 +87,18 @@ def main():
             for name in head_names:
                 x, y, w, h = signal_heads[name]
                 patch = hsv[y:y + h, x:x + w]
-                row[name] = classify_color(patch)
+                color = classify_color(patch)
+                # ONEMLI: dogrudan TEK HARFLIK SUMO koduna ceviriyoruz state_key'in her karakteri tam olarak bir sinyal kafasina karsilik gelsin diye.
+                row[name] = state_char(color)
             rows.append(row)
         frame_idx += 1
     cap.release()
 
     df = pd.DataFrame(rows)
     df.to_csv(args.out_timeline, index=False)
-    print(f">>> Zaman cizelgesi kaydedildi: {args.out_timeline} ({len(df)} ornek)")
+    print(f">>> Zaman çizelgesi kaydedildi: {args.out_timeline} ({len(df)} ornek)")
 
-    # Aynı renk vektörünün sürdüğü aralıkları (fazları) bulma
+    # Ayni renk vektorunun surdugu araliklari (fazlari) bul
     df["state_key"] = df[head_names].agg("".join, axis=1)
     phases = []
     cur_key = None
@@ -106,14 +117,17 @@ def main():
     # tlLogic XML uret
     lines = ['<?xml version="1.0" encoding="UTF-8"?>']
     lines.append("<!-- OTOMATİK ÜRETİLDİ - signal_light_extractor.py -->")
+    lines.append("<!-- state harflerinin sırasını netedit'teki gerçek connection")
+    lines.append("     sırasıyla doğrulayın, sadece 'duration' değerleri doğrudan")
+    lines.append("     videodan ölçülmüştür. -->")
     lines.append("<additional>")
     lines.append(f'    <tlLogic id="{args.tls_id}" type="static" '
                   f'programID="video-calibrated" offset="0">')
     for state_key, start, end in phases:
         duration = round(end - start, 1)
         if duration < 0.5:
-            continue  # gürültü / geçici okuma hatası, atla
-        state_str = "".join(state_char(c) for c in state_key)
+            continue  # gurultu / gecici okuma hatasi, atla
+        state_str = state_key
         lines.append(f'        <phase duration="{duration}" state="{state_str}"/>')
     lines.append("    </tlLogic>")
     lines.append("</additional>")
@@ -121,7 +135,7 @@ def main():
     with open(args.out_tls, "w") as f:
         f.write("\n".join(lines))
     print(f">>> Otomatik tls dosyası yazıldı: {args.out_tls}")
-    print(">>> UYARI: state harflerinin sırasını netedit'te dağrulanması lazım.")
+    print(">>> UYARI: state harflerinin sırasını netedit'te doğrulamayı unutma.")
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@
 <configuration>
     <input>
         <net-file value="../network/bellevue_116th_ne12th.net.xml"/>
-        <route-files value="routes.rou.xml"/>
+        <route-files value="routes_replay.rou.xml"/>
         <additional-files value="../network/bellevue_116th_ne12th.poly.xml"/>
         <gui-settings-file value="view_settings.xml"/>
     </input>
@@ -16,6 +16,7 @@
     <processing>
         <time-to-teleport value="-1"/>
         <collision.action value="warn"/>
+        <ignore-route-errors value="true"/>
     </processing>
 
     <report>
